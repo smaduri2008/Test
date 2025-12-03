@@ -1,18 +1,23 @@
 //Sahas Maduri and Sreekar Bheemavarapu -> 12/3/2025
 import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class TestFile
 {
 	public static void main(String [] args)
 	{
+	    ExecutorService executor = Executors.newFixedThreadPool(2);
+
 		long start = System.nanoTime();
 
-		// read file line
-		changeFile("frankenstein.txt");
-		changeFile("mobydick.txt");
+	    executor.submit(() -> changeFile("frankenstein.txt"));
+   		executor.submit(() -> changeFile("mobydick.txt"));
+    	executor.shutdown();
 
 		long end = System.nanoTime();
 
-		System.out.println((end-start)/100000);
+		System.out.println("Took " + (end-start)/100000 + " ms.");
 	}
 
 	public static void changeFile(String path) {
@@ -28,8 +33,9 @@ public class TestFile
 			}
 
 			writer.close();
-		}catch(IOException e)
+		} catch(IOException e)
 		{
+			e.printStackTrace();
 		}
 
 
